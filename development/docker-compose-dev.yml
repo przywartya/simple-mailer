@@ -9,5 +9,16 @@ services:
       - '../mailer-front/src:/usr/src/app/src'
       - '../mailer-front/public:/usr/src/app/public'
     ports:
-     - "3000:3000"
+      - "3000:3000"
     command: ["yarn", "start"]
+  mailer-api:
+    build:
+      context: ../
+      dockerfile: ./development/mailer-api/Dockerfile
+    volumes:
+      - '../mailer-api:/usr/src/app/'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mailer-front
+    command: ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
