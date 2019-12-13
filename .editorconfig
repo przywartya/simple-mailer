@@ -1,0 +1,36 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.sass]
+indent_size = 2
+
+[*package.json]
+indent_size = 2
+
+[*.yaml]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
+[*.yml]
+indent_size = 2
+
+[*.ejs]
+indent_size = 2
+
+[*.html]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tabs
