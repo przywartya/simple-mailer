@@ -1,1 +1,8 @@
 node_modules
+*.pyc
+
+.vscode
+.pytest_cache
+.mypy_cache
+
+env
