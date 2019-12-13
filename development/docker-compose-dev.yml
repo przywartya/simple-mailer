@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  mailer-front:
+    build:
+      context: ../
+      dockerfile: ./development/mailer-front/Dockerfile
+    volumes:
+      - '../mailer-front/src:/usr/src/app/src'
+      - '../mailer-front/public:/usr/src/app/public'
+    ports:
+     - "3000:3000"
+    command: ["yarn", "start"]
