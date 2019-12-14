@@ -1,16 +1,15 @@
-from fastapi import FastAPI
-from pydantic import BaseModel, EmailStr
+from fastapi import BackgroundTasks, FastAPI
+
+from .datatypes import Mail
+from .mail_sender import try_sending_to_email_service
 
 app = FastAPI()
 
 
-class Mail(BaseModel):
-    receiverEmail: EmailStr
-    senderEmail: EmailStr
-    emailSubject: str
-    message: str = None
-
-
 @app.post("/mail")
-def send_mail(mail: Mail):
+def send_mail(mail: Mail, background_tasks: BackgroundTasks):
+    background_tasks.add_task(
+        func=try_sending_to_email_service,
+        mail=mail
+    )
     return mail

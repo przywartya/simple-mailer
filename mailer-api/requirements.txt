@@ -14,3 +14,4 @@ uvloop==0.14.0
 websockets==8.1
 pytest-watch==4.2.0
 requests==2.22.0
+sendgrid==6.1.0

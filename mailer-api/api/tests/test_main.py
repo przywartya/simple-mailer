@@ -3,6 +3,7 @@ import json
 from unittest import mock
 from starlette.testclient import TestClient
 from api.src.main import app
+from api.src.datatypes import Mail
 
 client = TestClient(app)
 
@@ -68,7 +69,8 @@ def test_send_mail_invalid_emails():
     }
 
 
-def test_send_mail_valid_body():
+@mock.patch('api.src.main.try_sending_to_email_service')
+def test_send_mail_valid_body(task_mock):
     response = client.post("/mail", json.dumps({
         'receiverEmail': 'a@a.com',
         'senderEmail': 'b@b.com',
@@ -81,3 +83,12 @@ def test_send_mail_valid_body():
         'receiverEmail': 'a@a.com',
         'senderEmail': 'b@b.com'
     }
+
+    task_mock.assert_called_with(
+        mail=Mail(
+            receiverEmail='a@a.com',
+            senderEmail='b@b.com',
+            emailSubject='hello!',
+            message=None
+        )
+    )

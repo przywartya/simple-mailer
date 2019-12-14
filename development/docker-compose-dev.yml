@@ -1,5 +1,6 @@
 version: "3.4"
 
+
 services:
   mailer-front:
     build:
@@ -12,6 +13,10 @@ services:
       - "3000:3000"
     command: ["yarn", "start"]
   mailer-api:
+    environment:
+      - MAILGUN_URL=${MAILGUN_URL:?Please set MAILGUN_URL environment variable}
+      - MAILGUN_KEY=${MAILGUN_KEY:?Please set MAILGUN_KEY environment variable}
+      - SENDGRID_KEY=${SENDGRID_KEY:?Please set SENDGRID_KEY environment variable}
     build:
       context: ../
       dockerfile: ./development/mailer-api/Dockerfile
