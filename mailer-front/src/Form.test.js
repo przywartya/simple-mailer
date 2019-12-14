@@ -4,6 +4,16 @@ import { Form } from './Form';
 
 const getById = queryByAttribute.bind(null, 'id');
 
+jest.mock('react-text-transition', () => {
+    return {
+        __esModule: true,
+        default: jest.fn(props => props.text),
+        presets: {
+            'wobbly': '÷'
+        },
+    }
+});
+
 test('renders all necessary fields', () => {
   const form = render(<Form />);
 
