@@ -11,6 +11,8 @@ To start:
 * set the following environment variables with values from email: `MAILGUN_URL`, `MAILGUN_KEY`, `SENDGRID_KEY`
 * in the root directory run `make dev-build`
 * after previous point is finished, in the root directory run `make dev-start`
+* to visit application go to `http://localhost:3000`
+* to visit API docs go to `http://localhost:8080/docs`
 
 To run tests:
 * in the root directory run `make test-build`
