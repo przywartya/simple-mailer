@@ -1,0 +1,66 @@
+
+.main-container__form > label {
+    display: block;
+}
+
+.main-container__form > input {
+    display: block;
+    border-radius: 4px;
+    border: solid 1px #979997;
+    box-sizing: border-box;
+    outline: none;
+    margin: 14px 0;
+    padding: 14px 18px;
+    font-size: 18px;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    width: 100%;
+}
+
+.main-container__form > textarea {
+    display: block;
+    border: solid 1px #979997;
+    border-radius: 4px;
+    outline: none;
+    resize: vertical;
+    min-height: 200px;
+    max-height: 400px;
+    font-size: 18px;
+    margin: 14px 0;
+    padding-top: 14px;
+    padding-left: 18px;
+    width: 96%;
+}
+
+.main-container__form > input:focus, input:hover {
+    border-color: #7b7ac2;
+}
+
+.main-container__form > input::placeholder {
+    border-color: #979997;
+}
+
+.main-container__form > .error {
+    border-color: #ff4a30 !important;
+}
+
+.main-container__form > button[type=submit] {
+    padding: 14px 32px;
+    opacity: 1;
+    font-size: 18px;
+    color: #ffffff;
+    border-radius: 8px;
+    border: none;
+    background-color: #20a7dc;
+    box-sizing: border-box;
+    outline: none;
+    float: right;
+}
+
+.main-container__form > button[type=submit]:hover {
+    cursor: pointer;
+}
+
+.main-container__form > button[type=submit]:disabled {
+    opacity: 0.33;
+    cursor: default;
+}
