@@ -14,6 +14,7 @@ services:
     command: ["yarn", "start"]
   mailer-api:
     environment:
+      - DEBUG=True
       - MAILGUN_URL=${MAILGUN_URL:?Please set MAILGUN_URL environment variable}
       - MAILGUN_KEY=${MAILGUN_KEY:?Please set MAILGUN_KEY environment variable}
       - SENDGRID_KEY=${SENDGRID_KEY:?Please set SENDGRID_KEY environment variable}
@@ -26,4 +27,4 @@ services:
       - "8080:8080"
     depends_on:
       - mailer-front
-    command: ["uvicorn", "api.src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
+    command: ["uvicorn", "api.src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080", "--log-level", "debug"]

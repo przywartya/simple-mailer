@@ -1,5 +1,7 @@
 import os
 
+DEBUG = os.environ.get('DEBUG', False)
+
 SUCCESS_CODES = [200, 202]
 
 MAILGUN_URL = os.environ.get('MAILGUN_URL', None)

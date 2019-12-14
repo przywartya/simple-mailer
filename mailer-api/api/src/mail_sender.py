@@ -24,7 +24,7 @@ def try_sending_to_email_service(mail: Mail):
                 )
                 return
         except Exception:
-            logging.error(exc_info=True)
+            logging.error('exception', exc_info=True)
         else:
             logging.warning(
                 '(to: %s) sending from %s failed',
