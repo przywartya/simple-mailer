@@ -24,12 +24,14 @@
     margin: 0;
 }
 
+@media (max-width: 400px) {
+    .main-container__inner > p, label {
+        width: auto;
+    }
+}
+
 .main-container__inner > p, label {
     margin: 14px 0 0 0;
     font-size: 20px;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    width: 540px;
 }

@@ -8,7 +8,7 @@ function App() {
     return (
         <div className="main-container">
             <div className="main-container__inner">
-                <h1>Hi there,</h1>
+                <h1>Simple mailing service</h1>
                 <Form />
             </div>
         </div>
