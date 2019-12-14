@@ -25,12 +25,12 @@
 }
 
 @media (max-width: 400px) {
-    .main-container__inner > p, label {
+    .main-container__info-box {
         width: auto;
     }
 }
 
-.main-container__inner > p, label {
+.main-container__info-box {
     margin: 14px 0 0 0;
     font-size: 20px;
     width: 540px;

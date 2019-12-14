@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useFormik } from 'formik';
+import TextTransition, { presets } from "react-text-transition";
 
 import { isEmpty } from './utils';
 
@@ -43,16 +44,18 @@ export function Form() {
         validate,
         onSubmit: values => {
             setInfoBox(`Congrats! Your message was sent successfully 🥳`);
+            formik.resetForm();
             setTimeout(() => {
                 setInfoBox(defaultInfoBox);
-                formik.resetForm();
             }, 4000);
         },
     });
 
     return (
         <>
-            <p>{infoBox}</p>
+            <div className="main-container__info-box">
+                <TextTransition text={infoBox} springConfig={presets.wobbly} />
+            </div>
             <form id="simpleMailerForm" className="main-container__form" onSubmit={formik.handleSubmit}>
                 <input
                     id="senderEmail"
