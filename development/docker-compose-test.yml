@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  test-mailer-front:
+    build:
+      context: ../
+      dockerfile: ./development/mailer-front/Dockerfile
+    volumes:
+      - '../mailer-front/src:/usr/src/app/src'
+      - '../mailer-front/public:/usr/src/app/public'
+    ports:
+      - "3000:3000"
+    command: ["yarn", "test", "--watch"]
+  test-mailer-api:
+    build:
+      context: ../
+      dockerfile: ./development/mailer-api/Dockerfile
+    volumes:
+      - '../mailer-api:/usr/src/app/'
+    ports:
+      - "8080:8080"
+    command: ["ptw"]
