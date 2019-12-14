@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 
 import { useFormik } from 'formik';
@@ -42,12 +43,22 @@ export function Form() {
             message: ''
         },
         validate,
-        onSubmit: values => {
-            setInfoBox(`Congrats! Your message was sent successfully 🥳`);
-            formik.resetForm();
-            setTimeout(() => {
-                setInfoBox(defaultInfoBox);
-            }, 4000);
+        onSubmit: async (values) => {
+            try {
+                await axios.post(
+                    'http://localhost:8080/mail',
+                    values
+                );
+                setInfoBox(`Congrats! Your message was sent successfully 🥳`);
+                formik.resetForm();
+            } catch(err) {
+                console.error(err);
+                setInfoBox(`We are sorry, something went wrong 🤧`);
+            } finally {
+                setTimeout(() => {
+                    setInfoBox(defaultInfoBox);
+                }, 4000);
+            }
         },
     });
 

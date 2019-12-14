@@ -42,6 +42,11 @@
     border-color: #ff4a30 !important;
 }
 
+.main-container__form > label {
+    margin-top: 14px;
+    font-size: 20px;
+}
+
 .main-container__form > button[type=submit] {
     padding: 14px 32px;
     opacity: 1;

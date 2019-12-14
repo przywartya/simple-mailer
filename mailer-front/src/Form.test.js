@@ -1,8 +1,12 @@
+import axios from "axios";
+
 import React from 'react';
 import { render, queryByAttribute, fireEvent, wait } from '@testing-library/react';
 import { Form } from './Form';
 
 const getById = queryByAttribute.bind(null, 'id');
+
+jest.mock('axios');
 
 jest.mock('react-text-transition', () => {
     return {
@@ -98,11 +102,21 @@ test('can submit form and its validated', async () => {
     });
     expect(emailSubject).not.toHaveClass('error');
 
+    axios.post.mockImplementation(() => Promise.reject({ data: 'NOT OK' }));
+
     await wait(() => {
         fireEvent.click(submit);
     });
 
-    const infoBox = form.getByText(/Congrats! Your message was sent successfully/i);
+    let infoBox = form.getByText(/We are sorry, something went wrong/i);
     expect(infoBox).toBeInTheDocument();
-  });
 
+    axios.post.mockImplementation(() => Promise.resolve({ data: 'OK' }));
+
+    await wait(() => {
+        fireEvent.click(submit);
+    });
+
+    infoBox = form.getByText(/Congrats! Your message was sent successfully/i);
+    expect(infoBox).toBeInTheDocument();
+});
