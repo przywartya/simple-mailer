@@ -26,30 +26,38 @@ test('renders all necessary fields', () => {
   expect(message).toBeInTheDocument();
 });
 
-test('can submit form', async () => {
+test('can submit form and its validated', async () => {
     const form = render(<Form />);
     const senderEmail = getById(form.container, 'senderEmail');
     const receiverEmail = getById(form.container, 'receiverEmail');
     const emailSubject = getById(form.container, 'emailSubject');
     const message = getById(form.container, 'message');
-
     const submit = form.container.querySelector('button[type="submit"]');
 
     await wait(() => {
         fireEvent.change(senderEmail, {
-            target: { value: 's@s.s' },
+            target: { value: 's@s.' },
         });
+        fireEvent.blur(senderEmail);
     });
+    expect(senderEmail).toHaveClass('error');
+
     await wait(() => {
         fireEvent.change(receiverEmail, {
-            target: { value: 'r@r.r' },
+            target: { value: 'r@r.' },
         });
+        fireEvent.blur(receiverEmail);
     });
+    expect(receiverEmail).toHaveClass('error');
+
     await wait(() => {
         fireEvent.change(emailSubject, {
-            target: { value: 'hello there' },
+            target: { value: '' },
         });
+        fireEvent.blur(emailSubject);
     });
+    expect(emailSubject).toHaveClass('error');
+
     await wait(() => {
         fireEvent.change(message, {
             target: { value: 'have a nice day' },
@@ -57,10 +65,34 @@ test('can submit form', async () => {
     });
 
     await wait(() => {
+        fireEvent.change(senderEmail, {
+            target: { value: 's@s.com' },
+        });
+        fireEvent.blur(senderEmail);
+    });
+    expect(senderEmail).not.toHaveClass('error');
+
+    await wait(() => {
+        fireEvent.change(receiverEmail, {
+            target: { value: 'r@r.dk' },
+        });
+        fireEvent.blur(receiverEmail);
+    });
+    expect(receiverEmail).not.toHaveClass('error');
+
+    await wait(() => {
+        fireEvent.change(emailSubject, {
+            target: { value: 'hello there' },
+        });
+        fireEvent.blur(emailSubject);
+    });
+    expect(emailSubject).not.toHaveClass('error');
+
+    await wait(() => {
         fireEvent.click(submit);
     });
 
-    const infoBox = form.getByText(/Your message to r@r.r was sent successfully/i);
+    const infoBox = form.getByText(/Congrats! Your message was sent successfully/i);
     expect(infoBox).toBeInTheDocument();
   });
 
