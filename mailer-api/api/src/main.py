@@ -1,13 +1,16 @@
 from fastapi import FastAPI
+from pydantic import BaseModel, EmailStr
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class Mail(BaseModel):
+    receiverEmail: EmailStr
+    senderEmail: EmailStr
+    emailSubject: str
+    message: str = None
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/mail")
+def send_mail(mail: Mail):
+    return mail
