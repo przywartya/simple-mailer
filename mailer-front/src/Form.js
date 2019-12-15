@@ -8,39 +8,36 @@ import { isEmpty } from "./utils";
 
 import "./Form.css";
 
+const formFields = [
+    { id: "senderEmail", type: "email", placeholder: "Sender's email" },
+    { id: "receiverEmail", type: "email", placeholder: "Receiver's email" },
+    { id: "emailSubject", type: "text", placeholder: "Subject" },
+    { id: "message", type: "textarea", placeholder: "Your message goes here:" }
+];
+
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
-const validate = values => {
+function validate(values) {
     const errors = {};
-
-    if (!values.emailSubject) {
-        errors.emailSubject = "Required";
-    }
-
-    const emailFields = ["senderEmail", "receiverEmail"];
-
-    emailFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = "Required";
-        } else if (!emailRegex.test(values[field])) {
-            errors[field] = "Invalid email address";
+    formFields.forEach(({ id, type }) => {
+        if (!values[id]) {
+            errors[id] = "Required";
+        } else if (type === "email" && !emailRegex.test(values[id])) {
+            errors[id] = "Invalid email address";
         }
     });
-
     return errors;
-};
+}
 
 export function Form() {
     const defaultInfoBox =
         "You can use this form to send email messages to anybody 🌎";
     const [infoBox, setInfoBox] = React.useState(defaultInfoBox);
     const formik = useFormik({
-        initialValues: {
-            senderEmail: "",
-            receiverEmail: "",
-            emailSubject: "",
-            message: ""
-        },
+        initialValues: formFields.reduce((prev, { id }) => {
+            prev[id] = "";
+            return prev;
+        }, {}),
         validate,
         onSubmit: async values => {
             try {
@@ -58,6 +55,13 @@ export function Form() {
         }
     });
 
+    const submitDisabled =
+        formik.touched.senderEmail &&
+        formik.touched.receiverEmail &&
+        formik.touched.emailSubject &&
+        formik.touched.message &&
+        !isEmpty(formik.errors);
+
     return (
         <>
             <div className="main-container__info-box">
@@ -68,71 +72,53 @@ export function Form() {
                 className="main-container__form"
                 onSubmit={formik.handleSubmit}
             >
-                <input
-                    id="senderEmail"
-                    name="senderEmail"
-                    type="email"
-                    placeholder="Sender's email"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.senderEmail}
-                    className={
-                        formik.touched.senderEmail && formik.errors.senderEmail
-                            ? "error"
-                            : ""
-                    }
-                />
-                <input
-                    id="receiverEmail"
-                    name="receiverEmail"
-                    type="email"
-                    placeholder="Receiver's email"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.receiverEmail}
-                    className={
-                        formik.touched.receiverEmail &&
-                        formik.errors.receiverEmail
-                            ? "error"
-                            : ""
-                    }
-                />
-                <input
-                    id="emailSubject"
-                    name="emailSubject"
-                    type="text"
-                    placeholder="Subject"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.emailSubject}
-                    className={
-                        formik.touched.emailSubject &&
-                        formik.errors.emailSubject
-                            ? "error"
-                            : ""
-                    }
-                />
-                <label htmlFor="message">Your message goes here:</label>
-                <textarea
-                    id="message"
-                    type="text"
-                    name="message"
-                    value={formik.values.message}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                />
-                <button
-                    type="submit"
-                    disabled={
-                        formik.touched.senderEmail &&
-                        formik.touched.receiverEmail &&
-                        formik.touched.emailSubject &&
-                        !isEmpty(formik.errors)
-                    }
-                >
+                {formFields.map(({ id, type, placeholder }) => (
+                    <Field
+                        formik={formik}
+                        key={id}
+                        fieldName={id}
+                        fieldType={type}
+                        placeholder={placeholder}
+                    />
+                ))}
+                <button type="submit" disabled={submitDisabled}>
                     Send
                 </button>
             </form>
         </>
+    );
+}
+
+function Field({ formik, fieldName, fieldType, placeholder }) {
+    if (fieldType === "textarea") {
+        return (
+            <>
+                <label htmlFor={fieldName}>{placeholder}</label>
+                <textarea
+                    type="text"
+                    id={fieldName}
+                    name={fieldName}
+                    value={formik.values[fieldName]}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                />
+            </>
+        );
+    }
+    return (
+        <input
+            id={fieldName}
+            name={fieldName}
+            type={fieldType}
+            placeholder={placeholder}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values[fieldName]}
+            className={
+                formik.touched[fieldName] && formik.errors[fieldName]
+                    ? "error"
+                    : ""
+            }
+        />
     );
 }
