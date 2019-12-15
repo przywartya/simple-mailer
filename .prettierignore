@@ -1,0 +1,12 @@
+Makefile
+README.md
+pyproject.toml
+.pre-commit-config.yaml
+.gitignore
+.flake8
+.editorconfig
+development
+mailer-api
+.github/workflows
+package.json
+yarn.lock
