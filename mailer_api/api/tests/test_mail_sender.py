@@ -49,7 +49,10 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
         )
     )
     logging_mock.warning.assert_called_with(
-        "(to: %s) sending from %s failed", "a@a.com", "MockProvider400"
+        "(to: %s) sending from %s failed (response: %s)",
+        "a@a.com",
+        "MockProvider400",
+        mock.ANY,
     )
     logging_mock.info.assert_called_with(
         "(to: %s) sent from %s", "a@a.com", "MockProvider200"
@@ -65,7 +68,10 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
         )
     )
     logging_mock.warning.assert_called_with(
-        "(to: %s) sending from %s failed", "a@a.com", "MockProvider500"
+        "(to: %s) sending from %s failed (response: %s)",
+        "a@a.com",
+        "MockProvider500",
+        mock.ANY,
     )
     logging_mock.info.assert_called_with(
         "(to: %s) sent from %s", "a@a.com", "MockProvider202"

@@ -1,6 +1,6 @@
 from fastapi import BackgroundTasks, FastAPI
 
-from .const import DEBUG
+from .const import DEBUG, USE_REDIS
 from .datatypes import Mail
 from .mail_sender import try_sending_to_email_service
 
@@ -17,8 +17,17 @@ if DEBUG == "True":
         allow_headers=["*"],
     )
 
+if USE_REDIS == "True":
+    from redis import Redis
+    from rq import Queue
+
+    redis_queue = Queue(connection=Redis(host="redis", port=6379))
+
 
 @app.post("/mail")
 def send_mail(mail: Mail, background_tasks: BackgroundTasks):
-    background_tasks.add_task(func=try_sending_to_email_service, mail=mail)
+    if USE_REDIS:
+        redis_queue.enqueue(try_sending_to_email_service, mail=mail)
+    else:
+        background_tasks.add_task(func=try_sending_to_email_service, mail=mail)
     return mail
