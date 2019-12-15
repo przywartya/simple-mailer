@@ -45,7 +45,7 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )
     logging_mock.warning.assert_called_with(
@@ -61,7 +61,7 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )
     logging_mock.warning.assert_called_with(

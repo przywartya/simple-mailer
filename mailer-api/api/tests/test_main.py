@@ -94,7 +94,7 @@ def test_send_mail_valid_body(task_mock):
     assert response.status_code == 200
     assert response.json() == {
         "emailSubject": "hello!",
-        "message": None,
+        "message": "",
         "receiverEmail": "a@a.com",
         "senderEmail": "b@b.com",
     }
@@ -104,6 +104,6 @@ def test_send_mail_valid_body(task_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )

@@ -14,7 +14,7 @@ def test_mailgun_post_message(requests_post_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )
     requests_post_mock.assert_called_with(
@@ -23,7 +23,7 @@ def test_mailgun_post_message(requests_post_mock):
             "from": "b@b.com",
             "to": "a@a.com",
             "subject": "hello!",
-            "text": None,
+            "text": "",
         },
         url=MAILGUN_URL,
     )
@@ -36,7 +36,7 @@ def test_sendgrid_post_message(sendgrid_post_mock, _get_message_mock):
         from_email="b@b.com",
         to_emails="a@a.com",
         subject="hello!",
-        plain_text_content=None,
+        plain_text_content="",
     )
 
     _get_message_mock.return_value = sendgrid_mail_helper
@@ -46,7 +46,7 @@ def test_sendgrid_post_message(sendgrid_post_mock, _get_message_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )
     _get_message_mock.assert_called_with(
@@ -54,7 +54,7 @@ def test_sendgrid_post_message(sendgrid_post_mock, _get_message_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message=None,
+            message="",
         )
     )
     sendgrid_post_mock.assert_called_with(message=sendgrid_mail_helper)
