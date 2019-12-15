@@ -1,4 +1,3 @@
-import logging
 import requests
 
 from sendgrid import SendGridAPIClient, helpers
@@ -25,8 +24,8 @@ class Mailgun(BaseEmailProvider):
                 "from": mail.senderEmail,
                 "to": mail.receiverEmail,
                 "subject": mail.emailSubject,
-                "text": mail.message
-            }
+                "text": mail.message,
+            },
         )
 
     @property
@@ -34,27 +33,23 @@ class Mailgun(BaseEmailProvider):
         return MAILGUN_KEY
 
     def __str__(self):
-        return 'Mailgun'
+        return "Mailgun"
 
 
 class Sendgrid(BaseEmailProvider):
     def __init__(self):
         super().__init__()
-        self.api_client = SendGridAPIClient(
-            api_key=self.api_key
-        )
+        self.api_client = SendGridAPIClient(api_key=self.api_key)
 
     def post_message(self, mail: Mail) -> requests.Response:
-        return self.api_client.send(
-            message=self._get_message(mail=mail)
-        )
+        return self.api_client.send(message=self._get_message(mail=mail))
 
     def _get_message(self, mail: Mail):
         return helpers.mail.Mail(
             from_email=mail.senderEmail,
             to_emails=mail.receiverEmail,
             subject=mail.emailSubject,
-            plain_text_content=mail.message
+            plain_text_content=mail.message,
         )
 
     @property
@@ -62,10 +57,7 @@ class Sendgrid(BaseEmailProvider):
         return SENDGRID_KEY
 
     def __str__(self):
-        return 'Sendgrid'
+        return "Sendgrid"
 
 
-PROVIDERS = [
-    Sendgrid(),
-    Mailgun(),
-]
+PROVIDERS = [Sendgrid(), Mailgun()]

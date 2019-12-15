@@ -6,7 +6,7 @@ from .mail_sender import try_sending_to_email_service
 
 app = FastAPI()
 
-if DEBUG == 'True':
+if DEBUG == "True":
     from starlette.middleware.cors import CORSMiddleware
 
     app.add_middleware(
@@ -20,8 +20,5 @@ if DEBUG == 'True':
 
 @app.post("/mail")
 def send_mail(mail: Mail, background_tasks: BackgroundTasks):
-    background_tasks.add_task(
-        func=try_sending_to_email_service,
-        mail=mail
-    )
+    background_tasks.add_task(func=try_sending_to_email_service, mail=mail)
     return mail
