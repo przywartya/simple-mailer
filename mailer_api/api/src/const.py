@@ -1,5 +1,6 @@
 import os
 
+USE_REDIS = os.environ.get("USE_REDIS", False)
 DEBUG = os.environ.get("DEBUG", False)
 
 SUCCESS_CODES = [200, 202]

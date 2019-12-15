@@ -1,5 +1,13 @@
 version: "3.4"
 
+x-env-test: &env-test
+  environment:
+    - DEBUG=True
+    - USE_REDIS=True
+    - MAILGUN_URL=${MAILGUN_URL:?Please set MAILGUN_URL environment variable}
+    - MAILGUN_KEY=${MAILGUN_KEY:?Please set MAILGUN_KEY environment variable}
+    - SENDGRID_KEY=${SENDGRID_KEY:?Please set SENDGRID_KEY environment variable}
+
 
 services:
   mailer-front:
@@ -13,11 +21,7 @@ services:
       - "3000:3000"
     command: ["yarn", "start"]
   mailer-api:
-    environment:
-      - DEBUG=True
-      - MAILGUN_URL=${MAILGUN_URL:?Please set MAILGUN_URL environment variable}
-      - MAILGUN_KEY=${MAILGUN_KEY:?Please set MAILGUN_KEY environment variable}
-      - SENDGRID_KEY=${SENDGRID_KEY:?Please set SENDGRID_KEY environment variable}
+    <<: *env-test
     build:
       context: ../
       dockerfile: ./development/mailer-api/Dockerfile
@@ -28,3 +32,20 @@ services:
     depends_on:
       - mailer-front
     command: ["uvicorn", "api.src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080", "--log-level", "debug"]
+  redis:
+    image: redislabs/rejson:latest
+    ports:
+      - "6379"
+  mailer-sender:
+    <<: *env-test
+    build:
+      context: ../
+      dockerfile: ./development/mailer-api/Dockerfile
+    volumes:
+      - '../mailer_api:/usr/src/app/'
+    restart: on-failure
+    depends_on:
+      - redis
+      - mailer-api
+      - mailer-front
+    command: ["rq", "worker", "--url", "redis://redis:6379"]

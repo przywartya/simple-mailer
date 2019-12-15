@@ -28,6 +28,11 @@ def test_send_mail_empty_fields():
                 "msg": "field required",
                 "type": "value_error.missing",
             },
+            {
+                "loc": ["body", "mail", "message"],
+                "msg": "field required",
+                "type": "value_error.missing",
+            },
         ]
     }
 
@@ -53,6 +58,11 @@ def test_send_mail_invalid_emails():
                 "msg": "field required",
                 "type": "value_error.missing",
             },
+            {
+                "loc": ["body", "mail", "message"],
+                "msg": "field required",
+                "type": "value_error.missing",
+            },
         ]
     }
 
@@ -75,6 +85,11 @@ def test_send_mail_invalid_emails():
                 "msg": "field required",
                 "type": "value_error.missing",
             },
+            {
+                "loc": ["body", "mail", "message"],
+                "msg": "field required",
+                "type": "value_error.missing",
+            },
         ]
     }
 
@@ -88,13 +103,14 @@ def test_send_mail_valid_body(task_mock):
                 "receiverEmail": "a@a.com",
                 "senderEmail": "b@b.com",
                 "emailSubject": "hello!",
+                "message": "world",
             }
         ),
     )
     assert response.status_code == 200
     assert response.json() == {
         "emailSubject": "hello!",
-        "message": "",
+        "message": "world",
         "receiverEmail": "a@a.com",
         "senderEmail": "b@b.com",
     }
@@ -104,6 +120,6 @@ def test_send_mail_valid_body(task_mock):
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
             emailSubject="hello!",
-            message="",
+            message="world",
         )
     )

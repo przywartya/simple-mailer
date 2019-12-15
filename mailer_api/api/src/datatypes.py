@@ -5,4 +5,4 @@ class Mail(BaseModel):
     receiverEmail: EmailStr
     senderEmail: EmailStr
     emailSubject: str
-    message: str = ""
+    message: str
