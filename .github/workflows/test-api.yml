@@ -22,6 +22,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r mailer-api/requirements.txt
+        pip install -r mailer_api/requirements.txt
     - name: Test with pytest
-      run: pytest
+      run: |
+        cd mailer_api/
+        python -m pytest

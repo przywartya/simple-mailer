@@ -12,7 +12,7 @@ RUN python3.7 -m pip install --upgrade \
     wheel \
     ipdb
 
-COPY mailer-api/requirements.txt /usr/src/app/requirements.txt
+COPY mailer_api/requirements.txt /usr/src/app/requirements.txt
 
 WORKDIR /usr/src/app/
 

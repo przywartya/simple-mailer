@@ -22,7 +22,7 @@ services:
       context: ../
       dockerfile: ./development/mailer-api/Dockerfile
     volumes:
-      - '../mailer-api:/usr/src/app/'
+      - '../mailer_api:/usr/src/app/'
     ports:
       - "8080:8080"
     depends_on:

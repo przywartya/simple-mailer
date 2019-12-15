@@ -6,7 +6,7 @@ pyproject.toml
 .flake8
 .editorconfig
 development
-mailer-api
+mailer_api
 .github/workflows
 package.json
 yarn.lock
