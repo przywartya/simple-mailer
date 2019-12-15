@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .main-container__inner {
     min-width: 300px;
     padding: 22px;

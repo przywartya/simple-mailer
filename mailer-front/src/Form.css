@@ -11,7 +11,7 @@
     margin: 14px 0;
     padding: 14px 18px;
     font-size: 18px;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     width: 100%;
 }
 
@@ -30,7 +30,8 @@
     width: 96%;
 }
 
-.main-container__form > input:focus, input:hover {
+.main-container__form > input:focus,
+input:hover {
     border-color: #7b7ac2;
 }
 
@@ -47,7 +48,7 @@
     font-size: 20px;
 }
 
-.main-container__form > button[type=submit] {
+.main-container__form > button[type="submit"] {
     padding: 14px 32px;
     opacity: 1;
     font-size: 18px;
@@ -60,11 +61,11 @@
     float: right;
 }
 
-.main-container__form > button[type=submit]:hover {
+.main-container__form > button[type="submit"]:hover {
     cursor: pointer;
 }
 
-.main-container__form > button[type=submit]:disabled {
+.main-container__form > button[type="submit"]:disabled {
     opacity: 0.33;
     cursor: default;
 }

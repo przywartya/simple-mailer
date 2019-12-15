@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { Form } from './Form';
+import { Form } from "./Form";
 
-import './App.css';
+import "./App.css";
 
 function App() {
     return (
