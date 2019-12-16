@@ -4,12 +4,12 @@ from sendgrid import helpers
 
 from api.src.const import MAILGUN_KEY, MAILGUN_URL
 from api.src.datatypes import Mail
-from api.src.mail_providers import Mailgun, Sendgrid
+from api.src import mail_providers
 
 
 @mock.patch("api.src.mail_providers.requests.post")
 def test_mailgun_post_message(requests_post_mock):
-    Mailgun().post_message(
+    mail_providers.Mailgun().post_message(
         mail=Mail(
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
@@ -41,7 +41,7 @@ def test_sendgrid_post_message(sendgrid_post_mock, _get_message_mock):
 
     _get_message_mock.return_value = sendgrid_mail_helper
 
-    Sendgrid().post_message(
+    mail_providers.Sendgrid().post_message(
         mail=Mail(
             receiverEmail="a@a.com",
             senderEmail="b@b.com",
@@ -58,3 +58,29 @@ def test_sendgrid_post_message(sendgrid_post_mock, _get_message_mock):
         )
     )
     sendgrid_post_mock.assert_called_with(message=sendgrid_mail_helper)
+
+
+@mock.patch("api.src.mail_providers.time.sleep")
+def test_mail_provider_connection_timer(sleep_mock):
+    mail_providers.PROVIDER_RETRIES_BACKOFF_MAX = 3
+    mail_providers.PROVIDER_RETRIES_BACKOFF_FACTOR = 0.3
+
+    provider = mail_providers.BaseEmailProvider()
+
+    for _, time_to_sleep in zip(range(5), [None, 0.3, 0.6, 1.2, 2.4]):
+        provider.check_and_wait()
+        provider.connection_failed()
+        time_to_sleep and sleep_mock.assert_called_with(time_to_sleep)
+
+
+@mock.patch("api.src.mail_providers.time.sleep")
+def test_mail_provider_connection_backoff_max(sleep_mock):
+    mail_providers.PROVIDER_RETRIES_BACKOFF_MAX = 1
+    mail_providers.PROVIDER_RETRIES_BACKOFF_FACTOR = 0.3
+
+    provider = mail_providers.BaseEmailProvider()
+
+    for _, time_to_sleep in zip(range(6), [None, 0.3, 0.6, None, 0.3, 0.6]):
+        provider.check_and_wait()
+        provider.connection_failed()
+        time_to_sleep and sleep_mock.assert_called_with(time_to_sleep)

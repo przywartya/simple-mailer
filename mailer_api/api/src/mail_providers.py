@@ -1,12 +1,40 @@
+import logging
 import requests
+import time
 
 from sendgrid import SendGridAPIClient, helpers
 
-from .const import MAILGUN_KEY, MAILGUN_URL, SENDGRID_KEY
+from .const import (
+    MAILGUN_KEY,
+    MAILGUN_URL,
+    SENDGRID_KEY,
+    PROVIDER_RETRIES_BACKOFF_FACTOR,
+    PROVIDER_RETRIES_BACKOFF_MAX,
+)
 from .datatypes import Mail
 
 
 class BaseEmailProvider:
+    def __init__(self):
+        self.number_of_retries = 0
+
+    def check_and_wait(self):
+        if self.number_of_retries and self.number_of_retries > 0:
+            time_to_sleep = PROVIDER_RETRIES_BACKOFF_FACTOR * (
+                2 ** (self.number_of_retries - 1)
+            )
+            if time_to_sleep > PROVIDER_RETRIES_BACKOFF_MAX:
+                self.reset_retries()
+            else:
+                logging.warning("sleeping for %s", time_to_sleep)
+                time.sleep(time_to_sleep)
+
+    def connection_failed(self):
+        self.number_of_retries += 1
+
+    def reset_retries(self):
+        self.number_of_retries = 0
+
     def post_message(self, mail: Mail):
         raise NotImplementedError
 
