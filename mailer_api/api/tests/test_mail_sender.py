@@ -55,14 +55,16 @@ def test_it_iterates_over_providers_and_tries_to_post_message(
     assert check_and_wait_mock.call_count == 2
     assert connection_failed_mock.call_count == 1
 
-    logging_mock.warning.assert_called_with(
-        "(to: %s) sending from %s failed (response: %s)",
-        "a@a.com",
-        "MockProvider400",
-        mock.ANY,
-    )
-    logging_mock.info.assert_called_with(
-        "(to: %s) sent from %s", "a@a.com", "MockProvider200"
+    logging_mock.warning.assert_has_calls(
+        [
+            mock.call(
+                "(to: %s) sending from %s failed (response: %s)",
+                "a@a.com",
+                "MockProvider400",
+                mock.ANY,
+            ),
+            mock.call("(to: %s) sent from %s", "a@a.com", "MockProvider200"),
+        ]
     )
 
     mail_sender.PROVIDERS = [MockProvider500(), MockProvider202()]
@@ -77,12 +79,14 @@ def test_it_iterates_over_providers_and_tries_to_post_message(
     assert check_and_wait_mock.call_count == 4
     assert connection_failed_mock.call_count == 2
 
-    logging_mock.warning.assert_called_with(
-        "(to: %s) sending from %s failed (response: %s)",
-        "a@a.com",
-        "MockProvider500",
-        mock.ANY,
-    )
-    logging_mock.info.assert_called_with(
-        "(to: %s) sent from %s", "a@a.com", "MockProvider202"
+    logging_mock.warning.assert_has_calls(
+        [
+            mock.call(
+                "(to: %s) sending from %s failed (response: %s)",
+                "a@a.com",
+                "MockProvider500",
+                mock.ANY,
+            ),
+            mock.call("(to: %s) sent from %s", "a@a.com", "MockProvider202"),
+        ]
     )

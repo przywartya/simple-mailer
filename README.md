@@ -1,6 +1,6 @@
 # Simple mailing service
 
-This project is a very simple email website. It takes parameters from a user on the frontend, validates it's correctness and sends it to the backend. The backend has one endpoint `/mail/` which takes form data and pushes it to a Redis queue or starts a background task on server (depending on setting the `USE_REDIS` environment variable). 
+This project is a very simple email website. It takes parameters from a user on the frontend, validates it's correctness and sends it to the backend. The backend has one endpoint `/mail/` which takes form data and pushes it to a Redis queue or starts a background task on server (depending on setting the `USE_REDIS` environment variable).
 
 
 The `background task/queue worker` is defined in `mail_sender.py`. It loops over available email providers, trying to send the message until any of them responds with a success status code. Also, if some of the providers fail to respond, the sender will wait an exponential amount of time (limited to one minue max, then the timer is reset) for that particular provider.
