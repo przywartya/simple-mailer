@@ -37,8 +37,12 @@ class MockProvider500(BaseEmailProvider):
         return "MockProvider500"
 
 
+@mock.patch("api.src.mail_providers.BaseEmailProvider.connection_failed")
+@mock.patch("api.src.mail_providers.BaseEmailProvider.check_and_wait")
 @mock.patch("api.src.mail_sender.logging")
-def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
+def test_it_iterates_over_providers_and_tries_to_post_message(
+    logging_mock, check_and_wait_mock, connection_failed_mock
+):
     mail_sender.PROVIDERS = [MockProvider400(), MockProvider200()]
     mail_sender.try_sending_to_email_service(
         mail=Mail(
@@ -48,6 +52,9 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
             message="",
         )
     )
+    assert check_and_wait_mock.call_count == 2
+    assert connection_failed_mock.call_count == 1
+
     logging_mock.warning.assert_called_with(
         "(to: %s) sending from %s failed (response: %s)",
         "a@a.com",
@@ -67,6 +74,9 @@ def test_it_iterates_over_providers_and_tries_to_post_message(logging_mock):
             message="",
         )
     )
+    assert check_and_wait_mock.call_count == 4
+    assert connection_failed_mock.call_count == 2
+
     logging_mock.warning.assert_called_with(
         "(to: %s) sending from %s failed (response: %s)",
         "a@a.com",
